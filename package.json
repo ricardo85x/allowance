@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@types/chai-as-promised": "^7.1.4",
-    "chai-as-promised": "^7.1.1"
+    "chai-as-promised": "^7.1.1",
+    "dotenv": "^10.0.0",
+    "hardhat-deploy": "^0.8.11"
   }
 }

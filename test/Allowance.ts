@@ -8,7 +8,7 @@ const { expect } = chai
 import { ethers, waffle } from "hardhat"
 const { deployContract } = waffle
 
-import AllowanceArtifact from "../artifacts/contracts/Allowance.sol/Allowance.json"
+import AllowanceArtifact from "../src/artifacts/contracts/Allowance.sol/Allowance.json"
 import { Allowance } from "../src/types/Allowance"
 
 type Account = {
