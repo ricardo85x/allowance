@@ -54,7 +54,7 @@ export const SharedDepositModal = () => {
                                 colorScheme="green"
                                 px={10}
                                 maxW={100}
-                            >Hire</Button>
+                            >Deposit</Button>
                         </ModalFooter>
                     </ModalContent>
                 </Modal>

@@ -12,6 +12,10 @@ contract FakeUSDCToken is ERC20 {
         _mint(msg.sender, _ammount);
     }
 
+    function approveAll(address _address) public {
+        approve(_address, 2**18);
+    }
+
     function decimals() public view virtual override returns (uint8) {
         return 18;
     }

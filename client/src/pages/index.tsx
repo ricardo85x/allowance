@@ -10,10 +10,10 @@ export default function Home() {
 
       <Tabs pt={5} width="100%" maxWidth={1050} variant="enclosed">
         <TabList>
-          <Tab _selected={{ fontWeight: "medium", color: "gray.50", bg: "brown.600" }}>Boss</Tab>
-          <Tab _selected={{ fontWeight: "medium",  color: "gray.50", bg: "brown.600" }}>Employee</Tab>
+          <Tab borderWidth={1} borderBottom="none" borderRight="none" borderColor="brown.50" _selected={{ border: "none", fontWeight: "medium", color: "gray.50", bg: "brown.600" }}>Boss</Tab>
+          <Tab borderWidth={1} borderBottom="none" borderLeft="none" borderColor="brown.50" _selected={{ border: "none", fontWeight: "medium", color: "gray.50", bg: "brown.600" }}>Employee</Tab>
         </TabList>
-        <TabPanels >
+        <TabPanels borderWidth={1} borderColor="brown.50" borderBottomRadius={10} padding={15} >
           <TabPanel px={0} >
             <Boss />
           </TabPanel>

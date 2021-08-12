@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/ricardoteixeira/Documents/code/solidity/cryptomarketpool/allowance/contracts/Allowance.sol": {
-      "lastModificationDate": 1626910536279,
-      "contentHash": "830dc6d2f9e77873c9e5d970e708e813",
+      "lastModificationDate": 1628735757269,
+      "contentHash": "de27a478111215434ff00c1bd7841289",
       "sourceName": "contracts/Allowance.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -35,7 +35,9 @@
           }
         }
       },
-      "imports": [],
+      "imports": [
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol"
+      ],
       "versionPragmas": [
         "^0.8.0"
       ],
@@ -44,8 +46,8 @@
       ]
     },
     "/Users/ricardoteixeira/Documents/code/solidity/cryptomarketpool/allowance/contracts/UsdcToken.sol": {
-      "lastModificationDate": 1628118723550,
-      "contentHash": "a75b15b03cac0bdb7de7cc0ef29ab708",
+      "lastModificationDate": 1628566706291,
+      "contentHash": "489de41cdff7c503aae5ecae4c4ca547",
       "sourceName": "contracts/UsdcToken.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -259,6 +261,48 @@
       ],
       "artifacts": [
         "Context"
+      ]
+    },
+    "/Users/ricardoteixeira/Documents/code/solidity/cryptomarketpool/allowance/node_modules/hardhat/console.sol": {
+      "lastModificationDate": 1628116036581,
+      "contentHash": "cc4777addd464ea56fa35b1c45df0591",
+      "sourceName": "hardhat/console.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        ">=0.4.22 <0.9.0"
+      ],
+      "artifacts": [
+        "console"
       ]
     }
   }

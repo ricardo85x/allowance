@@ -12,7 +12,6 @@ import {
   BaseContract,
   ContractTransaction,
   Overrides,
-  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -22,32 +21,35 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface AllowanceInterface extends ethers.utils.Interface {
   functions: {
+    "currency()": FunctionFragment;
     "employee(address)": FunctionFragment;
     "fire(address)": FunctionFragment;
-    "hire(address,string)": FunctionFragment;
+    "hire(address,string,uint256)": FunctionFragment;
     "job(address)": FunctionFragment;
     "payEmployee(address)": FunctionFragment;
-    "sharedDeposit()": FunctionFragment;
+    "sharedBonusDeposit(uint256)": FunctionFragment;
     "withdrawAll()": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "currency", values?: undefined): string;
   encodeFunctionData(functionFragment: "employee", values: [string]): string;
   encodeFunctionData(functionFragment: "fire", values: [string]): string;
   encodeFunctionData(
     functionFragment: "hire",
-    values: [string, string]
+    values: [string, string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "job", values: [string]): string;
   encodeFunctionData(functionFragment: "payEmployee", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "sharedDeposit",
-    values?: undefined
+    functionFragment: "sharedBonusDeposit",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "withdrawAll",
     values?: undefined
   ): string;
 
+  decodeFunctionResult(functionFragment: "currency", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "employee", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "fire", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "hire", data: BytesLike): Result;
@@ -57,7 +59,7 @@ interface AllowanceInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "sharedDeposit",
+    functionFragment: "sharedBonusDeposit",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -112,15 +114,28 @@ export class Allowance extends BaseContract {
   interface: AllowanceInterface;
 
   functions: {
+    currency(overrides?: CallOverrides): Promise<[string]>;
+
     employee(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [string, string, string, boolean, BigNumber, BigNumber] & {
+      [
+        string,
+        string,
+        string,
+        boolean,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
         boss: string;
         name: string;
         _address: string;
         employed: boolean;
+        salary: BigNumber;
+        paymentDate: BigNumber;
         balance: BigNumber;
         oldBalance: BigNumber;
       }
@@ -134,6 +149,7 @@ export class Allowance extends BaseContract {
     hire(
       _address: string,
       _name: string,
+      _salary: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -144,11 +160,12 @@ export class Allowance extends BaseContract {
 
     payEmployee(
       _address: string,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    sharedDeposit(
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    sharedBonusDeposit(
+      _amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     withdrawAll(
@@ -156,15 +173,28 @@ export class Allowance extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  currency(overrides?: CallOverrides): Promise<string>;
+
   employee(
     arg0: string,
     overrides?: CallOverrides
   ): Promise<
-    [string, string, string, boolean, BigNumber, BigNumber] & {
+    [
+      string,
+      string,
+      string,
+      boolean,
+      BigNumber,
+      BigNumber,
+      BigNumber,
+      BigNumber
+    ] & {
       boss: string;
       name: string;
       _address: string;
       employed: boolean;
+      salary: BigNumber;
+      paymentDate: BigNumber;
       balance: BigNumber;
       oldBalance: BigNumber;
     }
@@ -178,6 +208,7 @@ export class Allowance extends BaseContract {
   hire(
     _address: string,
     _name: string,
+    _salary: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -188,11 +219,12 @@ export class Allowance extends BaseContract {
 
   payEmployee(
     _address: string,
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  sharedDeposit(
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+  sharedBonusDeposit(
+    _amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   withdrawAll(
@@ -200,15 +232,28 @@ export class Allowance extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    currency(overrides?: CallOverrides): Promise<string>;
+
     employee(
       arg0: string,
       overrides?: CallOverrides
     ): Promise<
-      [string, string, string, boolean, BigNumber, BigNumber] & {
+      [
+        string,
+        string,
+        string,
+        boolean,
+        BigNumber,
+        BigNumber,
+        BigNumber,
+        BigNumber
+      ] & {
         boss: string;
         name: string;
         _address: string;
         employed: boolean;
+        salary: BigNumber;
+        paymentDate: BigNumber;
         balance: BigNumber;
         oldBalance: BigNumber;
       }
@@ -219,6 +264,7 @@ export class Allowance extends BaseContract {
     hire(
       _address: string,
       _name: string,
+      _salary: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -229,7 +275,10 @@ export class Allowance extends BaseContract {
 
     payEmployee(_address: string, overrides?: CallOverrides): Promise<void>;
 
-    sharedDeposit(overrides?: CallOverrides): Promise<void>;
+    sharedBonusDeposit(
+      _amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     withdrawAll(overrides?: CallOverrides): Promise<void>;
   };
@@ -237,6 +286,8 @@ export class Allowance extends BaseContract {
   filters: {};
 
   estimateGas: {
+    currency(overrides?: CallOverrides): Promise<BigNumber>;
+
     employee(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     fire(
@@ -247,6 +298,7 @@ export class Allowance extends BaseContract {
     hire(
       _address: string,
       _name: string,
+      _salary: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -254,11 +306,12 @@ export class Allowance extends BaseContract {
 
     payEmployee(
       _address: string,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    sharedDeposit(
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    sharedBonusDeposit(
+      _amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     withdrawAll(
@@ -267,6 +320,8 @@ export class Allowance extends BaseContract {
   };
 
   populateTransaction: {
+    currency(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     employee(
       arg0: string,
       overrides?: CallOverrides
@@ -280,6 +335,7 @@ export class Allowance extends BaseContract {
     hire(
       _address: string,
       _name: string,
+      _salary: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -287,11 +343,12 @@ export class Allowance extends BaseContract {
 
     payEmployee(
       _address: string,
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    sharedDeposit(
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+    sharedBonusDeposit(
+      _amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     withdrawAll(

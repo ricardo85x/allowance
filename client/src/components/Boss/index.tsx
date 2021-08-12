@@ -17,7 +17,7 @@ export const Boss = () => {
     return (
 
         <Flex width="100%" gridGap={3} direction="column">
-            <Heading >My Employes</Heading>
+            <Heading color="brown.500"  >My Employes</Heading>
 
             <Box>
                 {myEmployees.length ? myEmployees.map(myEmployee => (
@@ -37,8 +37,8 @@ export const Boss = () => {
                         }
 
 
-                        <Tooltip bg="brown.50" color="black" label="Deposit" aria-label="Deposit">
-                            <IconButton title="Deposit" mx={1} size="xs" colorScheme="green" aria-label="Deposit" icon={<FaMoneyBillAlt />} />
+                        <Tooltip bg="brown.50" color="black" label="Pay Salary" aria-label="Pay Salary">
+                            <IconButton title="Pay Salary" mx={1} size="xs" colorScheme="green" aria-label="Pay Salary" icon={<FaMoneyBillAlt />} />
                         </Tooltip>
 
                         <Tooltip bg="brown.50" color="black" label="Fire the emproyee" aria-label="Fire the emproyee">
@@ -60,17 +60,17 @@ export const Boss = () => {
 
 
 
-            <Divider />
+            <Divider borderBottomColor="brown.50" />
 
-            <Heading >Hire Employee</Heading>
+            <Heading color="brown.500"  >Hire Employee</Heading>
 
             <HireModal />
 
 
 
-            <Divider />
+            <Divider borderBottomColor="brown.50" />
 
-            <Heading >Shared Wallet</Heading>
+            <Heading color="brown.500"  >Shared Wallet</Heading>
 
             <Text>The value deposited here, will be shared between all employes</Text>
 
