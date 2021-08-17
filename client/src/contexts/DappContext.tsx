@@ -123,10 +123,10 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
                     const currentNetwork = validNetworks[network.chainId.toString()]
 
                     const AllowanceArtifact = currentNetwork == "Ganache" ? AllowanceGanache : AllowanceRopsten
-                    const _allowanceContract = new ethers.Contract(AllowanceArtifact.address, AllowanceArtifact.abi, signer) as AllowanceProps
+                    const _allowanceContract = new ethers.Contract(AllowanceArtifact.address, AllowanceArtifact.abi, signer) as any as AllowanceProps
 
                     const FakeUSDTokenArtifact = currentNetwork == "Ganache" ? FakeUSDTokenGanache : FakeUSDTokenRopsten
-                    const _fakeUSDTokenContract = new ethers.Contract(FakeUSDTokenArtifact.address, FakeUSDTokenArtifact.abi, signer) as FakeUSDTokenProps
+                    const _fakeUSDTokenContract = new ethers.Contract(FakeUSDTokenArtifact.address, FakeUSDTokenArtifact.abi, signer) as any as FakeUSDTokenProps
 
                     !!_allowanceContract && _allowanceContract.removeAllListeners();
 
