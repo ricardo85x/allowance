@@ -24,7 +24,7 @@ interface AllowanceInterface extends ethers.utils.Interface {
     "currency()": FunctionFragment;
     "employee(address)": FunctionFragment;
     "fire(address)": FunctionFragment;
-    "hire(address,string,uint256)": FunctionFragment;
+    "hire(address,string,string,uint256)": FunctionFragment;
     "job(address)": FunctionFragment;
     "payEmployee(address)": FunctionFragment;
     "sharedBonusDeposit(uint256)": FunctionFragment;
@@ -36,7 +36,7 @@ interface AllowanceInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "fire", values: [string]): string;
   encodeFunctionData(
     functionFragment: "hire",
-    values: [string, string, BigNumberish]
+    values: [string, string, string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "job", values: [string]): string;
   encodeFunctionData(functionFragment: "payEmployee", values: [string]): string;
@@ -124,6 +124,7 @@ export class Allowance extends BaseContract {
         string,
         string,
         string,
+        string,
         boolean,
         BigNumber,
         BigNumber,
@@ -132,6 +133,7 @@ export class Allowance extends BaseContract {
       ] & {
         boss: string;
         name: string;
+        position: string;
         _address: string;
         employed: boolean;
         salary: BigNumber;
@@ -149,6 +151,7 @@ export class Allowance extends BaseContract {
     hire(
       _address: string,
       _name: string,
+      _position: string,
       _salary: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -183,6 +186,7 @@ export class Allowance extends BaseContract {
       string,
       string,
       string,
+      string,
       boolean,
       BigNumber,
       BigNumber,
@@ -191,6 +195,7 @@ export class Allowance extends BaseContract {
     ] & {
       boss: string;
       name: string;
+      position: string;
       _address: string;
       employed: boolean;
       salary: BigNumber;
@@ -208,6 +213,7 @@ export class Allowance extends BaseContract {
   hire(
     _address: string,
     _name: string,
+    _position: string,
     _salary: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -242,6 +248,7 @@ export class Allowance extends BaseContract {
         string,
         string,
         string,
+        string,
         boolean,
         BigNumber,
         BigNumber,
@@ -250,6 +257,7 @@ export class Allowance extends BaseContract {
       ] & {
         boss: string;
         name: string;
+        position: string;
         _address: string;
         employed: boolean;
         salary: BigNumber;
@@ -264,6 +272,7 @@ export class Allowance extends BaseContract {
     hire(
       _address: string,
       _name: string,
+      _position: string,
       _salary: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -298,6 +307,7 @@ export class Allowance extends BaseContract {
     hire(
       _address: string,
       _name: string,
+      _position: string,
       _salary: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -335,6 +345,7 @@ export class Allowance extends BaseContract {
     hire(
       _address: string,
       _name: string,
+      _position: string,
       _salary: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

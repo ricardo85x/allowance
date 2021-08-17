@@ -19,6 +19,7 @@ contract Allowance {
     struct Employee {
         address boss;
         string name;
+        string position;
         address _address;
         bool employed;
         uint256 salary;
@@ -72,6 +73,7 @@ contract Allowance {
     function hire(
         address _address,
         string memory _name,
+        string memory _position,
         uint256 _salary
     ) external unemployed(_address) {
         require(msg.sender != _address, "You, can't hire yourself");
@@ -80,6 +82,7 @@ contract Allowance {
 
         employee[_address].employed = true;
         employee[_address].name = _name;
+        employee[_address].position = _position;
         employee[_address]._address = _address;
         employee[_address].boss = msg.sender;
         employee[_address].salary = _salary;

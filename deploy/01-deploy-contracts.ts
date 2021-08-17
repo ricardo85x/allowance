@@ -7,9 +7,16 @@ const func: DeployFunction = async function(hre: HardhatRuntimeEnvironment) {
     // get the address of named account
     const { deployer } = await getNamedAccounts(); 
 
-    await deploy('Allowance', {
+
+    const fakeUSDTokenContract = await deploy('FakeUSDToken', {
         from: deployer,
         args: [],
+        log: false
+    })
+
+    await deploy('Allowance', {
+        from: deployer,
+        args: [fakeUSDTokenContract.address],
         log: true
     })
 
@@ -18,4 +25,4 @@ const func: DeployFunction = async function(hre: HardhatRuntimeEnvironment) {
 };
 
 export default func;
-func.tags = ['Allowance'];
+func.tags = ['Allowance', 'FakeUSDCToken'];

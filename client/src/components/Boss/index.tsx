@@ -6,6 +6,8 @@ import { AiFillFire } from "react-icons/ai"
 import { HireModal } from "./HireModal"
 import { SharedDepositModal } from "./SharedDepositModal"
 
+import { EmployeeList } from "./EmployeeList"
+
 export const Boss = () => {
 
     const myEmployees = [
@@ -19,46 +21,7 @@ export const Boss = () => {
         <Flex width="100%" gridGap={3} direction="column">
             <Heading color="brown.500"  >My Employes</Heading>
 
-            <Box>
-                {myEmployees.length ? myEmployees.map(myEmployee => (
-                    <Grid p={2} _hover={{
-                        backgroundColor: "rgb(205,133,63,.1)",
-                    }} key={myEmployee.address} templateColumns="1fr 100px 35px 35px" >
-
-                        <Text>{myEmployee.name}</Text>
-
-                        {
-                            myEmployee.paid === 1 ?
-                                <Badge margin="auto" colorScheme="green">paid</Badge> :
-                                myEmployee.paid === 0 ?
-                                    <Badge margin="auto" colorScheme="red">not paid</Badge> :
-                                    <Badge margin="auto" colorScheme="orange">partially paid</Badge>
-
-                        }
-
-
-                        <Tooltip bg="brown.50" color="black" label="Pay Salary" aria-label="Pay Salary">
-                            <IconButton title="Pay Salary" mx={1} size="xs" colorScheme="green" aria-label="Pay Salary" icon={<FaMoneyBillAlt />} />
-                        </Tooltip>
-
-                        <Tooltip bg="brown.50" color="black" label="Fire the emproyee" aria-label="Fire the emproyee">
-                            <IconButton title="Fire the emproyee" mx={1} size="xs" colorScheme="red" aria-label="Fire the emproyee" icon={<AiFillFire />} />
-                        </Tooltip>
-
-
-
-
-
-                    </Grid>
-                )) : (
-                    <>
-                        <Text> You have no employees... </Text>
-                        <Text> Hire some employees </Text>
-                    </>
-                )}
-            </Box>
-
-
+            <EmployeeList employees={myEmployees} />
 
             <Divider borderBottomColor="brown.50" />
 
@@ -70,9 +33,9 @@ export const Boss = () => {
 
             <Divider borderBottomColor="brown.50" />
 
-            <Heading color="brown.500"  >Shared Wallet</Heading>
+            <Heading color="brown.500"  >Shared Bonus Wallet</Heading>
 
-            <Text>The value deposited here, will be shared between all employes</Text>
+            <Text>The value deposited here, will be shared between all employees</Text>
 
             <SharedDepositModal />
            

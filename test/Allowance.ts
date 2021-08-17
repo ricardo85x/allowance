@@ -11,12 +11,13 @@ const { deployContract } = waffle
 import AllowanceArtifact from "../src/artifacts/contracts/Allowance.sol/Allowance.json"
 import { Allowance } from "../src/types/Allowance"
 
-import FakeUSDCTokenArtifact from "../src/artifacts/contracts/UsdcToken.sol/FakeUSDCToken.json"
-import { FakeUSDCToken } from "../src/types/FakeUSDCToken"
+import FakeUSDTokenArtifact from "../src/artifacts/contracts/FakeUSDToken.sol/FakeUSDToken.json"
+import { FakeUSDToken } from "../src/types/FakeUSDToken"
 
 
 type Account = {
     address: string;
+    position: string;
     name: string;
     signer: SignerWithAddress
 }
@@ -27,7 +28,7 @@ describe("Allowance smart contract", () => {
     let allowanceContractAccount2: Allowance;
     let allowanceContractAccount3: Allowance;
 
-    let fakeUSDCTokenContractAccount1: FakeUSDCToken;
+    let fakeUSDCTokenContractAccount1: FakeUSDToken;
 
     let signers: SignerWithAddress[] = [];
 
@@ -44,8 +45,8 @@ describe("Allowance smart contract", () => {
             const signer = signers[i];
             const address = await signer.getAddress();
             const name = `Account #${i}`
-
-            const account = { name, address, signer };
+            const position = ` Dev`
+            const account = { name, address, signer, position };
             accounts.push(account);
 
             if (i > 10) {
@@ -55,7 +56,7 @@ describe("Allowance smart contract", () => {
 
 
 
-        fakeUSDCTokenContractAccount1 = (await deployContract(signers[0], FakeUSDCTokenArtifact)) as FakeUSDCToken;
+        fakeUSDCTokenContractAccount1 = (await deployContract(signers[0], FakeUSDTokenArtifact)) as FakeUSDToken;
 
         allowanceContractAccount1 = (await deployContract(
             signers[0],
@@ -70,7 +71,7 @@ describe("Allowance smart contract", () => {
 
     it('should hire employees', async () => {
 
-        await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name, SALARY);
+        await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name,accounts[1].position, SALARY);
 
         expect((await allowanceContractAccount1.employee(accounts[1].address)).employed)
             .to.be.equals(true);
@@ -84,7 +85,7 @@ describe("Allowance smart contract", () => {
 
     it("should fire", async () => {
 
-        await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name, SALARY);
+        await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name, accounts[1].position, SALARY);
 
         expect((await allowanceContractAccount1.employee(accounts[1].address)).employed)
             .to.be.equals(true);
@@ -105,7 +106,7 @@ describe("Allowance smart contract", () => {
         await fakeUSDCTokenContractAccount1.approveAll(allowanceContractAccount1.address);
 
         // hire a employee
-        await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name, SALARY);
+        await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name, accounts[1].position, SALARY);
 
         // expect to be the boss of this employee
         expect((await allowanceContractAccount1.employee(accounts[1].address)).boss)
@@ -144,7 +145,7 @@ describe("Allowance smart contract", () => {
 
         // hire employees
         for (let i = 0; i < employees.length; i++) {
-            await allowanceContractAccount1.hire(accounts[employees[i]].address, accounts[employees[i]].name, SALARY);
+            await allowanceContractAccount1.hire(accounts[employees[i]].address, accounts[employees[i]].name, accounts[employees[i]].position, SALARY);
         }
        
         // previous employee balance
@@ -175,7 +176,7 @@ describe("Allowance smart contract", () => {
         await fakeUSDCTokenContractAccount1.approveAll(allowanceContractAccount1.address);
 
         // hire a employee
-        await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name, SALARY);
+        await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name, accounts[1].position, SALARY);
 
         // pay his salary
         await allowanceContractAccount1.payEmployee(accounts[1].address)
@@ -211,23 +212,23 @@ describe("Allowance smart contract", () => {
     it("should fail to hire employed account", async () => {
 
         // boss 1 hired employee 1
-        await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name, SALARY);
+        await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name,  accounts[1].position, SALARY);
 
         // boss 3 should fail to hire employee 1
-        await expect(allowanceContractAccount3.hire(accounts[1].address, accounts[1].name, SALARY))
+        await expect(allowanceContractAccount3.hire(accounts[1].address, accounts[1].name, accounts[1].position, SALARY))
             .to.eventually.be.rejectedWith("this person already has a job");
 
         // boss 1 fire employee 1
         await allowanceContractAccount1.fire(accounts[1].address);
 
         // now boss 3 should be able to hide employee 1
-        expect(allowanceContractAccount3.hire(accounts[1].address, accounts[1].name, SALARY))
+        expect(allowanceContractAccount3.hire(accounts[1].address, accounts[1].name, accounts[1].position, SALARY))
             .to.eventually.be.fulfilled;
 
     })
 
     it("should fail to hire itself", async () => {
-        expect(allowanceContractAccount1.hire(accounts[0].address, accounts[0].name, SALARY))
+        expect(allowanceContractAccount1.hire(accounts[0].address, accounts[0].name, accounts[0].position, SALARY))
             .to.eventually.be.rejectedWith("You, can't hire yourself")
     })
 })

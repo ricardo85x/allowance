@@ -3,8 +3,8 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract FakeUSDCToken is ERC20 {
-    constructor() ERC20("Fake USDC Token","USDC") {
+contract FakeUSDToken is ERC20 {
+    constructor() ERC20("Fake USD Token","FUSD") {
 
     }
     // send free to all!
