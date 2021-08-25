@@ -1,20 +1,81 @@
-import { Flex, Box, Badge, Divider, Heading, Grid, Button, IconButton, Text, Tooltip } from "@chakra-ui/react"
-
-import { FaMoneyBillAlt } from "react-icons/fa"
-import { AiFillFire } from "react-icons/ai"
-
+import { Flex, Divider, Heading, Text } from "@chakra-ui/react"
 import { HireModal } from "./HireModal"
 import { SharedDepositModal } from "./SharedDepositModal"
 
 import { EmployeeList } from "./EmployeeList"
 
+import {  useDapp } from "../../contexts/DappContext"
+import { useEffect, useState } from "react"
+import { ethers } from "ethers"
+
+
+
+type EmployeesProps  = {
+    name: string;    
+    address: string;
+    paid: boolean;
+    salary: string;
+}
+
 export const Boss = () => {
 
-    const myEmployees = [
-        { address: '0x1', name: 'Marcos', paid: 0 },
-        { address: '0x2', name: 'Rose', paid: 1 },
-        { address: '0x3', name: 'Tom', paid: 2 }
-    ]
+    const { allowanceContract, accounts } = useDapp()
+
+
+    const [myEmployees, setMyEmployees] = useState<EmployeesProps[]>([])
+
+
+
+    const loadEmployees = async () => {
+        if (accounts.length && !! allowanceContract) {
+
+            const employees = await allowanceContract.myEmployees()
+
+            const _employees: EmployeesProps[] = []
+
+            console.log("my employees",employees)
+
+            if (employees.length){
+                console.log(employees[0].paymentDate.toNumber())
+
+
+                for(let i = 0; i < employees.length; i++){
+                    
+
+                    const current_employee = employees[i]
+                    if(current_employee.employed){
+                        const paid = (await allowanceContract.alreadyPaid(current_employee._address));
+
+                        _employees.push({
+                            name: current_employee.name,
+                            address: current_employee._address,
+                            paid,
+                            salary: current_employee.salary.toString()
+                        })
+
+                    }
+
+                }
+
+                
+            }
+
+
+
+           
+            setMyEmployees(_employees)
+            
+
+        } 
+    }
+
+
+    useEffect(() => {
+        setTimeout(() => loadEmployees(), 1000)
+    }, [accounts, allowanceContract])
+
+
+    
 
     return (
 

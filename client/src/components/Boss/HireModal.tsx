@@ -1,4 +1,4 @@
-import { Flex, Button, Input, useDisclosure } from "@chakra-ui/react"
+import { Flex, Button, Input, useDisclosure, position } from "@chakra-ui/react"
 
 import {
     Modal,
@@ -10,13 +10,76 @@ import {
     ModalCloseButton,
 } from "@chakra-ui/react"
 
+import { ethers } from "ethers"
+
 import { useRef } from "react"
+
+import { useDapp } from "../../contexts/DappContext"
+import { notify } from "../../services/notify"
 
 export const HireModal = () => {
 
-    const initialFocusHireModalRef = useRef()
+
+    const { validAddress, allowanceContract } = useDapp()
+
+    const nameRef = useRef<HTMLInputElement>()
+    const positionRef = useRef<HTMLInputElement>()
+    const salaryRef = useRef<HTMLInputElement>()
+    const addressRef = useRef<HTMLInputElement>()
 
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+
+    const handleHireEmployee = async () => {
+
+        const [ name, position, salary, address ] = [
+            nameRef.current.value,
+            positionRef.current.value,
+            salaryRef.current.value,
+            addressRef.current.value
+        ]
+
+        // not empty
+        if (name && position && salary && address) {
+
+            if(!validAddress(address)){
+                notify("Invalid wallet address", "error")
+                return
+            } 
+
+            if(!salary.match(/^\d+([.]\d+)?$/) || Number(salary) <= 0){
+                notify("Invalid Salary", "error")
+                return
+            }
+
+            try {
+
+                await allowanceContract.hire(
+                    address,
+                    name, 
+                    position, 
+                    salary
+                )
+
+                notify("Employee hired, waiting for confirmation", "info")
+
+            } catch (e) {
+
+                notify("Error on hide this employee","error")
+
+                // console.log(e)
+            }
+        
+          
+
+
+        }
+
+        
+
+    }
+
+
 
     return (
         <>
@@ -41,13 +104,13 @@ export const HireModal = () => {
                         <ModalCloseButton />
                         <ModalBody>
                             <Flex direction="column" gridGap={2}>
-                                <Input ref={initialFocusHireModalRef} name="name" placeholder="Name" />
-                                <Input name="position" placeholder="Position" />
-                                <Input name="salary" placeholder="Salary in ETH" />
+                                <Input ref={nameRef} name="name" placeholder="Name" />
+                                <Input ref={addressRef} name="user_address" placeholder="Employee Wallet address" />
+                                <Input ref={positionRef} name="position" placeholder="Position" />
+                                <Input ref={salaryRef} name="salary" placeholder="Salary in ETH" />
 
-
+                                
                             </Flex>
-
                         </ModalBody>
 
                         <ModalFooter>
@@ -56,6 +119,7 @@ export const HireModal = () => {
                                 colorScheme="green"
                                 px={10}
                                 maxW={100}
+                                onClick={handleHireEmployee}
                             >Hire</Button>
                         </ModalFooter>
                     </ModalContent>

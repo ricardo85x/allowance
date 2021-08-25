@@ -5,12 +5,12 @@ export type { ERC20 } from "./ERC20";
 export type { IERC20Metadata } from "./IERC20Metadata";
 export type { IERC20 } from "./IERC20";
 export type { Allowance } from "./Allowance";
-export type { FakeUSDCToken } from "./FakeUSDCToken";
 export type { FakeUSDToken } from "./FakeUSDToken";
+export type { DateTime } from "./DateTime";
 
 export { ERC20__factory } from "./factories/ERC20__factory";
 export { IERC20Metadata__factory } from "./factories/IERC20Metadata__factory";
 export { IERC20__factory } from "./factories/IERC20__factory";
 export { Allowance__factory } from "./factories/Allowance__factory";
-export { FakeUSDCToken__factory } from "./factories/FakeUSDCToken__factory";
 export { FakeUSDToken__factory } from "./factories/FakeUSDToken__factory";
+export { DateTime__factory } from "./factories/DateTime__factory";

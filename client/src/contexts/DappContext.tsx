@@ -29,7 +29,10 @@ interface DappContextProps {
 interface DappProps {
     accounts: Array<string>;
     handleConnect: () => void;
+    validAddress: ( value: string) => boolean;
     dappError: ErrorProps;
+    allowanceContract: AllowanceProps;
+    fakeUSDContract:FakeUSDTokenProps;
 }
 
 type ErrorProps = {
@@ -200,17 +203,22 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
         handleConnect()
     }
 
-
+    const validAddress = (value: string) => {
+        return ethers.utils.isAddress(value)
+    }
 
     useEffect(() => {
         checkPreviousConnected()
     }, [])
 
-
+    
     const value: DappProps = {
         accounts,
         handleConnect,
-        dappError
+        dappError,
+        validAddress,
+        allowanceContract,
+        fakeUSDContract
     }
 
     return (

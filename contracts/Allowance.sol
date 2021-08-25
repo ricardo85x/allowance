@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./utils/DateTime.sol";
 
 contract Allowance {
     IERC20 public currency;
@@ -30,6 +31,9 @@ contract Allowance {
 
     mapping(address => Job) public job;
     mapping(address => Employee) public employee;
+
+
+    DateTime dateTimeApi;
 
     modifier unemployed(address _address) {
         require(
@@ -101,12 +105,27 @@ contract Allowance {
         employee[_address].employed = false;
     }
 
-    function payEmployee(address _address) external employed(_address) {
-        require(
-            (employee[_address].paymentDate == 0 ||
-                employee[_address].paymentDate < (block.timestamp - 30 days)),
-            "You alread paid in the last 30 days"
-        );
+
+    modifier canBePaid(address _address) {
+        require(alreadyPaid(_address) == false, "You alread paid this month");
+        _;
+    }
+
+    function alreadyPaid(address _address) public view employed(_address) returns(bool) {
+        if (
+            employee[_address].paymentDate == 0 ||
+            // employee[_address].paymentDate < (block.timestamp - 30 days) 
+            dateTimeApi.getMonth(employee[_address].paymentDate) != dateTimeApi.getMonth(block.timestamp)
+
+            ) {
+                return false; 
+        } else {
+            return true;
+        }
+    }
+
+
+    function payEmployee(address _address) external  employed(_address) canBePaid(_address) {
 
         uint256 allowance = currency.allowance(msg.sender, address(this));
         require(
@@ -124,6 +143,9 @@ contract Allowance {
         );
     }
 
+    
+    
+
     function withdrawAll() external {
         uint256 balance = employee[msg.sender].oldBalance +
             employee[msg.sender].balance;
@@ -134,6 +156,22 @@ contract Allowance {
 
         currency.transfer(msg.sender, balance);
     }
+
+    function myEmployees() public view returns (Employee [] memory) {
+
+        uint number_of_employees = job[msg.sender].employees.length;
+
+        Employee [] memory my_employees = new Employee[](number_of_employees);
+
+        if(number_of_employees > 0){
+            for(uint i = 0; i < number_of_employees; i++){
+                my_employees[i] = employee[job[msg.sender].employees[i]._address];
+            }
+        }
+        
+        return  my_employees;
+    }
+
 
     function sharedBonusDeposit(uint256 _amount) external hasEmployees {
         require(

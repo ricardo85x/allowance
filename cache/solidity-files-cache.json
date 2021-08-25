@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/ricardoteixeira/Documents/code/solidity/cryptomarketpool/allowance/contracts/Allowance.sol": {
-      "lastModificationDate": 1628810434726,
-      "contentHash": "70ce6a3808b2d3c73cac93605de33ffb",
+      "lastModificationDate": 1629856997743,
+      "contentHash": "61f8628b684db35f1a9a95cfe2703cbf",
       "sourceName": "contracts/Allowance.sol",
       "solcConfig": {
         "version": "0.8.0",
@@ -36,7 +36,8 @@
         }
       },
       "imports": [
-        "@openzeppelin/contracts/token/ERC20/IERC20.sol"
+        "@openzeppelin/contracts/token/ERC20/IERC20.sol",
+        "./utils/DateTime.sol"
       ],
       "versionPragmas": [
         "^0.8.0"
@@ -303,6 +304,48 @@
       ],
       "artifacts": [
         "FakeUSDToken"
+      ]
+    },
+    "/Users/ricardoteixeira/Documents/code/solidity/cryptomarketpool/allowance/contracts/utils/DateTime.sol": {
+      "lastModificationDate": 1629855000203,
+      "contentHash": "5e3fa16893be627a75a9370c8a8cf69c",
+      "sourceName": "contracts/utils/DateTime.sol",
+      "solcConfig": {
+        "version": "0.8.0",
+        "settings": {
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata",
+                "devdoc",
+                "userdoc",
+                "storageLayout",
+                "evm.gasEstimates"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          },
+          "metadata": {
+            "useLiteralContent": true
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "DateTime"
       ]
     }
   }

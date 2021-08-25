@@ -169,6 +169,8 @@ describe("Allowance smart contract", () => {
 
     it("should be able to withdrawAll", async () => {
 
+
+
         // get some free FakeUSDC
         await fakeUSDCTokenContractAccount1.GiveMeSome(INITIAL_BALANCE);
 
@@ -177,6 +179,7 @@ describe("Allowance smart contract", () => {
 
         // hire a employee
         await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name, accounts[1].position, SALARY);
+
 
         // pay his salary
         await allowanceContractAccount1.payEmployee(accounts[1].address)
@@ -230,5 +233,14 @@ describe("Allowance smart contract", () => {
     it("should fail to hire itself", async () => {
         expect(allowanceContractAccount1.hire(accounts[0].address, accounts[0].name, accounts[0].position, SALARY))
             .to.eventually.be.rejectedWith("You, can't hire yourself")
+    })
+
+
+    it("should list my employees", async () => {
+        await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name,  accounts[1].position, SALARY);
+        await allowanceContractAccount1.hire(accounts[2].address, accounts[2].name,  accounts[2].position, SALARY);
+        const myEmployees = await allowanceContractAccount1.myEmployees();
+        // console.log("myEmployees", myEmployees)
+
     })
 })
