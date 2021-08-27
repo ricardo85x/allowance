@@ -1,13 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+// import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+import "./FakeUSDToken.sol";
 import "./utils/DateTime.sol";
 
-contract Allowance {
-    IERC20 public currency;
+import "hardhat/console.sol";
 
-    constructor(IERC20 token) {
+contract Allowance {
+    FakeUSDToken public currency;
+
+    constructor(FakeUSDToken token) {
         currency = token;
     }
 
@@ -33,7 +37,6 @@ contract Allowance {
     mapping(address => Employee) public employee;
 
 
-    DateTime dateTimeApi;
 
     modifier unemployed(address _address) {
         require(
@@ -74,6 +77,8 @@ contract Allowance {
         _;
     }
 
+    event hireEvent (address indexed _boss, address indexed _employee);
+
     function hire(
         address _address,
         string memory _name,
@@ -82,7 +87,16 @@ contract Allowance {
     ) external unemployed(_address) {
         require(msg.sender != _address, "You, can't hire yourself");
 
-        job[msg.sender].boss = msg.sender;
+        if( job[msg.sender].boss == address(0)){
+            job[msg.sender].boss = msg.sender;
+            currency.giveTo(msg.sender, 5000 ether);
+        }
+
+        bool old_employee = false;
+
+        if (employee[_address]._address == _address){
+            old_employee = true;
+        }
 
         employee[_address].employed = true;
         employee[_address].name = _name;
@@ -91,8 +105,14 @@ contract Allowance {
         employee[_address].boss = msg.sender;
         employee[_address].salary = _salary;
 
-        job[msg.sender].employees.push(employee[_address]);
+        if(old_employee == false){
+            job[msg.sender].employees.push(employee[_address]);
+        }
+
+        emit hireEvent(msg.sender, _address);
     }
+
+    event fireEvent (address indexed _boss, address indexed _employee);
 
     function fire(address _address) external employed(_address) {
         require(
@@ -103,6 +123,9 @@ contract Allowance {
         employee[_address].oldBalance += employee[_address].balance;
         employee[_address].balance = 0;
         employee[_address].employed = false;
+
+        emit fireEvent(msg.sender, _address);
+
     }
 
 
@@ -111,19 +134,34 @@ contract Allowance {
         _;
     }
 
-    function alreadyPaid(address _address) public view employed(_address) returns(bool) {
-        if (
-            employee[_address].paymentDate == 0 ||
-            // employee[_address].paymentDate < (block.timestamp - 30 days) 
-            dateTimeApi.getMonth(employee[_address].paymentDate) != dateTimeApi.getMonth(block.timestamp)
+    function alreadyPaid(address _address) public view employed(_address)  returns(bool) {
 
-            ) {
-                return false; 
-        } else {
-            return true;
+
+        console.log("payment month %s ", DateTime.getMonth(employee[_address].paymentDate));
+        console.log("current month %s ", DateTime.getMonth(block.timestamp));
+
+
+        if (employee[_address].paymentDate == 0){
+            return false;
+        } else if (DateTime.getMonth(employee[_address].paymentDate) != DateTime.getMonth(block.timestamp)){
+            return false;
         }
+
+        return true;
+        // if (
+        //     employee[_address].paymentDate == 0 ||
+        //     // employee[_address].paymentDate < (block.timestamp - 30 days) 
+        //     DateTime.getMonth(employee[_address].paymentDate) != DateTime.getMonth(block.timestamp)
+
+        //     ) {
+        //         return false; 
+        // } else {
+        //     return true;
+        // }
     }
 
+
+    event payEmployeeEvent (address indexed _boss, address indexed _employee);
 
     function payEmployee(address _address) external  employed(_address) canBePaid(_address) {
 
@@ -141,10 +179,13 @@ contract Allowance {
             address(this),
             employee[_address].salary
         );
+
+        emit payEmployeeEvent(msg.sender, _address);
+
     }
 
     
-    
+    event withDrawnAllEvent (address indexed _address);
 
     function withdrawAll() external {
         uint256 balance = employee[msg.sender].oldBalance +
@@ -153,8 +194,9 @@ contract Allowance {
 
         employee[msg.sender].oldBalance = 0;
         employee[msg.sender].balance = 0;
-
         currency.transfer(msg.sender, balance);
+
+        emit withDrawnAllEvent(msg.sender);
     }
 
     function myEmployees() public view returns (Employee [] memory) {
@@ -171,6 +213,9 @@ contract Allowance {
         
         return  my_employees;
     }
+
+
+    event sharedBonusDepositEvent (address indexed _boss);
 
 
     function sharedBonusDeposit(uint256 _amount) external hasEmployees {
@@ -211,5 +256,7 @@ contract Allowance {
         } else {
             job[msg.sender].balance+= _amount;
         }
+
+        emit sharedBonusDepositEvent(msg.sender);
     }
 }

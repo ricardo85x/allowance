@@ -44,28 +44,33 @@ export const HireModal = () => {
 
             if(!validAddress(address)){
                 notify("Invalid wallet address", "error")
+
                 return
             } 
 
-            if(!salary.match(/^\d+([.]\d+)?$/) || Number(salary) <= 0){
+            if(!salary.match(/^\d+([.]\d+)?$/) || ethers.utils.parseEther(salary).lte(0)){
                 notify("Invalid Salary", "error")
+                
                 return
             }
 
             try {
 
+
                 await allowanceContract.hire(
                     address,
                     name, 
                     position, 
-                    salary
+                    ethers.utils.parseEther(salary)
                 )
 
                 notify("Employee hired, waiting for confirmation", "info")
 
+                onClose()
+
             } catch (e) {
 
-                notify("Error on hide this employee","error")
+                notify("This employee already has a job","error")
 
                 // console.log(e)
             }
@@ -74,6 +79,9 @@ export const HireModal = () => {
 
 
         }
+
+
+        
 
         
 
@@ -107,7 +115,7 @@ export const HireModal = () => {
                                 <Input ref={nameRef} name="name" placeholder="Name" />
                                 <Input ref={addressRef} name="user_address" placeholder="Employee Wallet address" />
                                 <Input ref={positionRef} name="position" placeholder="Position" />
-                                <Input ref={salaryRef} name="salary" placeholder="Salary in ETH" />
+                                <Input ref={salaryRef} name="salary" placeholder="Salary in FUSD" />
 
                                 
                             </Flex>

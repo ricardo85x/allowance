@@ -24,10 +24,10 @@ interface FakeUSDTokenInterface extends ethers.utils.Interface {
     "GiveMeSome(uint256)": FunctionFragment;
     "allowance(address,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
-    "approveAll(address)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "decimals()": FunctionFragment;
     "decreaseAllowance(address,uint256)": FunctionFragment;
+    "giveTo(address,uint256)": FunctionFragment;
     "increaseAllowance(address,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "symbol()": FunctionFragment;
@@ -48,11 +48,14 @@ interface FakeUSDTokenInterface extends ethers.utils.Interface {
     functionFragment: "approve",
     values: [string, BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "approveAll", values: [string]): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "decreaseAllowance",
+    values: [string, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "giveTo",
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
@@ -77,13 +80,13 @@ interface FakeUSDTokenInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "GiveMeSome", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "allowance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "approveAll", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "decreaseAllowance",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "giveTo", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "increaseAllowance",
     data: BytesLike
@@ -103,10 +106,14 @@ interface FakeUSDTokenInterface extends ethers.utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
+    "approveEvent(address)": EventFragment;
+    "giveToEvent(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "approveEvent"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "giveToEvent"): EventFragment;
 }
 
 export class FakeUSDToken extends BaseContract {
@@ -154,7 +161,7 @@ export class FakeUSDToken extends BaseContract {
 
   functions: {
     GiveMeSome(
-      _ammount: BigNumberish,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -170,11 +177,6 @@ export class FakeUSDToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    approveAll(
-      _address: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
     balanceOf(account: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     decimals(overrides?: CallOverrides): Promise<[number]>;
@@ -182,6 +184,12 @@ export class FakeUSDToken extends BaseContract {
     decreaseAllowance(
       spender: string,
       subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    giveTo(
+      _address: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -212,7 +220,7 @@ export class FakeUSDToken extends BaseContract {
   };
 
   GiveMeSome(
-    _ammount: BigNumberish,
+    _amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -228,11 +236,6 @@ export class FakeUSDToken extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  approveAll(
-    _address: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
   balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   decimals(overrides?: CallOverrides): Promise<number>;
@@ -240,6 +243,12 @@ export class FakeUSDToken extends BaseContract {
   decreaseAllowance(
     spender: string,
     subtractedValue: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  giveTo(
+    _address: string,
+    _amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -269,10 +278,7 @@ export class FakeUSDToken extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    GiveMeSome(
-      _ammount: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    GiveMeSome(_amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     allowance(
       owner: string,
@@ -286,8 +292,6 @@ export class FakeUSDToken extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    approveAll(_address: string, overrides?: CallOverrides): Promise<void>;
-
     balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<number>;
@@ -297,6 +301,12 @@ export class FakeUSDToken extends BaseContract {
       subtractedValue: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    giveTo(
+      _address: string,
+      _amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     increaseAllowance(
       spender: string,
@@ -342,11 +352,24 @@ export class FakeUSDToken extends BaseContract {
       [string, string, BigNumber],
       { from: string; to: string; value: BigNumber }
     >;
+
+    approveEvent(
+      _address?: string | null
+    ): TypedEventFilter<[string], { _address: string }>;
+
+    giveToEvent(
+      _from?: string | null,
+      _to?: string | null,
+      _amount?: BigNumberish | null
+    ): TypedEventFilter<
+      [string, string, BigNumber],
+      { _from: string; _to: string; _amount: BigNumber }
+    >;
   };
 
   estimateGas: {
     GiveMeSome(
-      _ammount: BigNumberish,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -362,11 +385,6 @@ export class FakeUSDToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    approveAll(
-      _address: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
     balanceOf(account: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
@@ -374,6 +392,12 @@ export class FakeUSDToken extends BaseContract {
     decreaseAllowance(
       spender: string,
       subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    giveTo(
+      _address: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -405,7 +429,7 @@ export class FakeUSDToken extends BaseContract {
 
   populateTransaction: {
     GiveMeSome(
-      _ammount: BigNumberish,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -421,11 +445,6 @@ export class FakeUSDToken extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    approveAll(
-      _address: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
     balanceOf(
       account: string,
       overrides?: CallOverrides
@@ -436,6 +455,12 @@ export class FakeUSDToken extends BaseContract {
     decreaseAllowance(
       spender: string,
       subtractedValue: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    giveTo(
+      _address: string,
+      _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

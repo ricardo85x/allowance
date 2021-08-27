@@ -22,28 +22,21 @@ export const EmployeeList = ({ employees }: EmployeeListProps) => {
     const { allowanceContract, fakeUSDContract, accounts } = useDapp()
 
 
-
-    if(!! fakeUSDContract){
-        console.log(fakeUSDContract.address)
-    }
     const checkAllowance = async (value: ethers.BigNumber) => {
 
         const approvedAllowance = await fakeUSDContract.allowance(accounts[0], allowanceContract.address)
 
-        
-        const freeCoins = ethers.utils.parseEther("5000");
-        if(approvedAllowance.toNumber() === 0){
-            await fakeUSDContract.GiveMeSome(freeCoins)
-            notify(`You just requested free 5000 FUSD because your are a boss`, "info")
-        }
+        console.log("allowance", approvedAllowance)
+    
 
         if (!(approvedAllowance >= value)) {
 
 
-            await fakeUSDContract.approveAll(allowanceContract.address)
+            notify("Please approve FUSD before paying your employees", "info")
 
+            console.log("request", value.toString())
 
-            notify("Approving token fakeUSD", "info")
+            console.log("approved", approvedAllowance.toString())
 
             return false
 
@@ -100,8 +93,10 @@ export const EmployeeList = ({ employees }: EmployeeListProps) => {
                                 <Tooltip label="already paid this month" >
                                     <Badge margin="auto" colorScheme="green">paid</Badge>
                                 </Tooltip>
-                                 :
-                                <Badge margin="auto" colorScheme="red">not paid</Badge> 
+                                 :<Tooltip label="You did not paid this employee this month">
+                                     <Badge margin="auto" colorScheme="red">not paid</Badge> 
+                                 </Tooltip>
+                                
                                    
                         }
 

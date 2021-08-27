@@ -32,10 +32,6 @@ declare module "hardhat/types/runtime" {
       name: "FakeUSDToken",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.FakeUSDToken__factory>;
-    getContractFactory(
-      name: "DateTime",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.DateTime__factory>;
 
     // default types
     getContractFactory(

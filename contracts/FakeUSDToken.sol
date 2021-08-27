@@ -8,13 +8,25 @@ contract FakeUSDToken is ERC20 {
 
     }
     // send free to all!
-    function GiveMeSome(uint _ammount) public {
-        _mint(msg.sender, _ammount);
+    function GiveMeSome(uint _amount) public {
+        _mint(msg.sender, _amount);
     }
 
-    function approveAll(address _address) public {
-        approve(_address, 2**18);
+    event giveToEvent(address indexed _from, address indexed _to, uint indexed _amount);
+    function giveTo(address _address, uint _amount) public {
+        _mint(_address, _amount);
+        emit giveToEvent(msg.sender, _address, _amount);
     }
+
+    event approveEvent(address indexed _address);
+
+
+    function approve(address spender, uint256 amount) public virtual override returns (bool) {
+        super.approve(spender, amount);
+        emit approveEvent(msg.sender);
+        return true;
+    }
+    
 
     function decimals() public view virtual override returns (uint8) {
         return 18;

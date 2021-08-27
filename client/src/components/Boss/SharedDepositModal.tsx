@@ -9,14 +9,62 @@ import {
     ModalBody,
     ModalCloseButton,
 } from "@chakra-ui/react"
+import { ethers } from "ethers"
 
 import { useRef } from "react"
+import { useDapp } from "../../contexts/DappContext"
+import { notify } from "../../services/notify"
 
 export const SharedDepositModal = () => {
 
+    const {allowanceContract } = useDapp()
+
     const initialFocusHireModalRef = useRef()
 
+    const bonusRef = useRef<HTMLInputElement>()
+
     const { isOpen, onOpen, onClose } = useDisclosure()
+
+
+    const handleWithdraw = async () => {
+        if(allowanceContract?.withdrawAll){
+
+            try {
+                await allowanceContract.withdrawAll()
+                notify("withdrawn requested, waiting for tx confirmation", "info")
+
+            } catch (e) {
+                notify("error on withdraw request, are you broke?", "info");
+            }
+        }
+    }
+
+    const handleSharedDeposit = async () => {
+        const bonus = bonusRef.current.value;
+
+        if (bonus) {
+
+            if(!bonus.match(/^\d+([.]\d+)?$/) || ethers.utils.parseEther(bonus).lte(0)){
+                notify("Invalid bonus amount", "error")
+                return
+            }
+
+            try {
+
+                await allowanceContract.sharedBonusDeposit(
+                    ethers.utils.parseEther(bonus)
+                )
+
+                notify("Bonus sent, waiting tx confirmation", "info")
+
+                onClose()
+
+            } catch (e) {
+                notify("Error on send bonus","error")
+            }
+        }
+ 
+    }
 
     return (
         <>
@@ -40,7 +88,7 @@ export const SharedDepositModal = () => {
                         <ModalCloseButton />
                         <ModalBody>
                             <Flex direction="column" gridGap={2}>
-                                <Input name="value" placeholder="Value in ETH" />
+                                <Input ref={bonusRef} name="value" placeholder="Value in FUSD" />
                             </Flex>
 
                         </ModalBody>
@@ -54,6 +102,8 @@ export const SharedDepositModal = () => {
                                 colorScheme="green"
                                 px={10}
                                 maxW={100}
+                                onClick={handleSharedDeposit}
+
                             >Deposit</Button>
                         </ModalFooter>
                     </ModalContent>

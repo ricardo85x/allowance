@@ -20,90 +20,15 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface DateTimeInterface extends ethers.utils.Interface {
   functions: {
-    "getDay(uint256)": FunctionFragment;
-    "getDaysInMonth(uint8,uint16)": FunctionFragment;
-    "getHour(uint256)": FunctionFragment;
-    "getMinute(uint256)": FunctionFragment;
-    "getMonth(uint256)": FunctionFragment;
-    "getSecond(uint256)": FunctionFragment;
-    "getWeekday(uint256)": FunctionFragment;
-    "getYear(uint256)": FunctionFragment;
-    "isLeapYear(uint16)": FunctionFragment;
-    "leapYearsBefore(uint256)": FunctionFragment;
-    "toTimestamp(uint16,uint8,uint8,uint8,uint8)": FunctionFragment;
+    "getMonth1(uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "getDay",
+    functionFragment: "getMonth1",
     values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getDaysInMonth",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getHour",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getMinute",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getMonth",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getSecond",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getWeekday",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getYear",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "isLeapYear",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "leapYearsBefore",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "toTimestamp",
-    values: [
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish,
-      BigNumberish
-    ]
   ): string;
 
-  decodeFunctionResult(functionFragment: "getDay", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "getDaysInMonth",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getHour", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getMinute", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getMonth", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getSecond", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getWeekday", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getYear", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "isLeapYear", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "leapYearsBefore",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "toTimestamp",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "getMonth1", data: BytesLike): Result;
 
   events: {};
 }
@@ -152,415 +77,36 @@ export class DateTime extends BaseContract {
   interface: DateTimeInterface;
 
   functions: {
-    getDay(
+    getMonth1(
       timestamp: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[number]>;
-
-    getDaysInMonth(
-      month: BigNumberish,
-      year: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[number]>;
-
-    getHour(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[number]>;
-
-    getMinute(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[number]>;
-
-    getMonth(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[number]>;
-
-    getSecond(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[number]>;
-
-    getWeekday(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[number]>;
-
-    getYear(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[number]>;
-
-    isLeapYear(
-      year: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    leapYearsBefore(
-      year: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    "toTimestamp(uint16,uint8,uint8,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      hour: BigNumberish,
-      minute: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { timestamp: BigNumber }>;
-
-    "toTimestamp(uint16,uint8,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      hour: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { timestamp: BigNumber }>;
-
-    "toTimestamp(uint16,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { timestamp: BigNumber }>;
-
-    "toTimestamp(uint16,uint8,uint8,uint8,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      hour: BigNumberish,
-      minute: BigNumberish,
-      second: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber] & { timestamp: BigNumber }>;
   };
 
-  getDay(timestamp: BigNumberish, overrides?: CallOverrides): Promise<number>;
-
-  getDaysInMonth(
-    month: BigNumberish,
-    year: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<number>;
-
-  getHour(timestamp: BigNumberish, overrides?: CallOverrides): Promise<number>;
-
-  getMinute(
+  getMonth1(
     timestamp: BigNumberish,
     overrides?: CallOverrides
   ): Promise<number>;
-
-  getMonth(timestamp: BigNumberish, overrides?: CallOverrides): Promise<number>;
-
-  getSecond(
-    timestamp: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<number>;
-
-  getWeekday(
-    timestamp: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<number>;
-
-  getYear(timestamp: BigNumberish, overrides?: CallOverrides): Promise<number>;
-
-  isLeapYear(year: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
-
-  leapYearsBefore(
-    year: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  "toTimestamp(uint16,uint8,uint8,uint8,uint8)"(
-    year: BigNumberish,
-    month: BigNumberish,
-    day: BigNumberish,
-    hour: BigNumberish,
-    minute: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  "toTimestamp(uint16,uint8,uint8,uint8)"(
-    year: BigNumberish,
-    month: BigNumberish,
-    day: BigNumberish,
-    hour: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  "toTimestamp(uint16,uint8,uint8)"(
-    year: BigNumberish,
-    month: BigNumberish,
-    day: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  "toTimestamp(uint16,uint8,uint8,uint8,uint8,uint8)"(
-    year: BigNumberish,
-    month: BigNumberish,
-    day: BigNumberish,
-    hour: BigNumberish,
-    minute: BigNumberish,
-    second: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
 
   callStatic: {
-    getDay(timestamp: BigNumberish, overrides?: CallOverrides): Promise<number>;
-
-    getDaysInMonth(
-      month: BigNumberish,
-      year: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<number>;
-
-    getHour(
+    getMonth1(
       timestamp: BigNumberish,
       overrides?: CallOverrides
     ): Promise<number>;
-
-    getMinute(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<number>;
-
-    getMonth(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<number>;
-
-    getSecond(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<number>;
-
-    getWeekday(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<number>;
-
-    getYear(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<number>;
-
-    isLeapYear(year: BigNumberish, overrides?: CallOverrides): Promise<boolean>;
-
-    leapYearsBefore(
-      year: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "toTimestamp(uint16,uint8,uint8,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      hour: BigNumberish,
-      minute: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "toTimestamp(uint16,uint8,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      hour: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "toTimestamp(uint16,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "toTimestamp(uint16,uint8,uint8,uint8,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      hour: BigNumberish,
-      minute: BigNumberish,
-      second: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
   };
 
   filters: {};
 
   estimateGas: {
-    getDay(
+    getMonth1(
       timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getDaysInMonth(
-      month: BigNumberish,
-      year: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getHour(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getMinute(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getMonth(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getSecond(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getWeekday(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getYear(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    isLeapYear(
-      year: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    leapYearsBefore(
-      year: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "toTimestamp(uint16,uint8,uint8,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      hour: BigNumberish,
-      minute: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "toTimestamp(uint16,uint8,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      hour: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "toTimestamp(uint16,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    "toTimestamp(uint16,uint8,uint8,uint8,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      hour: BigNumberish,
-      minute: BigNumberish,
-      second: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    getDay(
+    getMonth1(
       timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getDaysInMonth(
-      month: BigNumberish,
-      year: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getHour(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getMinute(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getMonth(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getSecond(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getWeekday(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getYear(
-      timestamp: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    isLeapYear(
-      year: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    leapYearsBefore(
-      year: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "toTimestamp(uint16,uint8,uint8,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      hour: BigNumberish,
-      minute: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "toTimestamp(uint16,uint8,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      hour: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "toTimestamp(uint16,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "toTimestamp(uint16,uint8,uint8,uint8,uint8,uint8)"(
-      year: BigNumberish,
-      month: BigNumberish,
-      day: BigNumberish,
-      hour: BigNumberish,
-      minute: BigNumberish,
-      second: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };

@@ -82,7 +82,19 @@ interface AllowanceInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
 
-  events: {};
+  events: {
+    "fireEvent(address,address)": EventFragment;
+    "hireEvent(address,address)": EventFragment;
+    "payEmployeeEvent(address,address)": EventFragment;
+    "sharedBonusDepositEvent(address)": EventFragment;
+    "withDrawnAllEvent(address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "fireEvent"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "hireEvent"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "payEmployeeEvent"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "sharedBonusDepositEvent"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "withDrawnAllEvent"): EventFragment;
 }
 
 export class Allowance extends BaseContract {
@@ -396,7 +408,30 @@ export class Allowance extends BaseContract {
     withdrawAll(overrides?: CallOverrides): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    fireEvent(
+      _boss?: string | null,
+      _employee?: string | null
+    ): TypedEventFilter<[string, string], { _boss: string; _employee: string }>;
+
+    hireEvent(
+      _boss?: string | null,
+      _employee?: string | null
+    ): TypedEventFilter<[string, string], { _boss: string; _employee: string }>;
+
+    payEmployeeEvent(
+      _boss?: string | null,
+      _employee?: string | null
+    ): TypedEventFilter<[string, string], { _boss: string; _employee: string }>;
+
+    sharedBonusDepositEvent(
+      _boss?: string | null
+    ): TypedEventFilter<[string], { _boss: string }>;
+
+    withDrawnAllEvent(
+      _address?: string | null
+    ): TypedEventFilter<[string], { _address: string }>;
+  };
 
   estimateGas: {
     alreadyPaid(

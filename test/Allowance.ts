@@ -83,6 +83,22 @@ describe("Allowance smart contract", () => {
             .to.be.equals(await accounts[0].address);
     })
 
+    it("should receive subsistence allowance on hire first employee", async () => {
+
+        expect(await fakeUSDCTokenContractAccount1.balanceOf(accounts[0].address)).to.be.equals(0);
+
+        await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name,accounts[1].position, SALARY);
+
+        // should receive 50 coins
+        expect(await fakeUSDCTokenContractAccount1.balanceOf(accounts[0].address)).to.be.equals(ethers.utils.parseEther("50"));
+
+        await allowanceContractAccount1.hire(accounts[2].address, accounts[2].name,accounts[2].position, SALARY);
+
+        // should stays with 50 coins
+        expect(await fakeUSDCTokenContractAccount1.balanceOf(accounts[0].address)).to.be.equals(ethers.utils.parseEther("50"));
+
+    })
+
     it("should fire", async () => {
 
         await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name, accounts[1].position, SALARY);

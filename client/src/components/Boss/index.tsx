@@ -1,4 +1,4 @@
-import { Flex, Divider, Heading, Text } from "@chakra-ui/react"
+import { Flex, Divider, Heading, Text, Button } from "@chakra-ui/react"
 import { HireModal } from "./HireModal"
 import { SharedDepositModal } from "./SharedDepositModal"
 
@@ -19,64 +19,19 @@ type EmployeesProps  = {
 
 export const Boss = () => {
 
-    const { allowanceContract, accounts } = useDapp()
+    
+    const { fakeUSDContract, allowanceContract, accounts, myEmployees } = useDapp()
 
 
-    const [myEmployees, setMyEmployees] = useState<EmployeesProps[]>([])
+    const handleApproveFUSD = () => {
+        if (accounts.length && !! fakeUSDContract?.approve && allowanceContract?.address) {
+            fakeUSDContract.approve(allowanceContract.address, ethers.utils.parseEther("999999999"))
 
-
-
-    const loadEmployees = async () => {
-        if (accounts.length && !! allowanceContract) {
-
-            const employees = await allowanceContract.myEmployees()
-
-            const _employees: EmployeesProps[] = []
-
-            console.log("my employees",employees)
-
-            if (employees.length){
-                console.log(employees[0].paymentDate.toNumber())
-
-
-                for(let i = 0; i < employees.length; i++){
-                    
-
-                    const current_employee = employees[i]
-                    if(current_employee.employed){
-                        const paid = (await allowanceContract.alreadyPaid(current_employee._address));
-
-                        _employees.push({
-                            name: current_employee.name,
-                            address: current_employee._address,
-                            paid,
-                            salary: current_employee.salary.toString()
-                        })
-
-                    }
-
-                }
-
-                
-            }
-
-
-
-           
-            setMyEmployees(_employees)
-            
-
-        } 
+            console.log("to approve",ethers.utils.parseEther("999999999").toString() )
+        }
     }
 
-
-    useEffect(() => {
-        setTimeout(() => loadEmployees(), 1000)
-    }, [accounts, allowanceContract])
-
-
     
-
     return (
 
         <Flex width="100%" gridGap={3} direction="column">
@@ -98,8 +53,34 @@ export const Boss = () => {
 
             <Text>The value deposited here, will be shared between all employees</Text>
 
+
+
+            <Divider borderBottomColor="brown.50" />
+
+
+
+            
+
+
             <SharedDepositModal />
-           
+
+
+            <Divider borderBottomColor="brown.50" />
+
+            <Text>Approve FUSD to pay your employees</Text>
+            <Button
+                    onClick={handleApproveFUSD}
+                    size="xs"
+                    colorScheme="whiteAlpha"
+                    backgroundColor="brown.100"
+                    textColor="black"
+                    _hover={{ backgroundColor: "brown.50" }}
+                    px={10}
+                    maxW={100}
+                >
+                    Approve FUSD
+                </Button>
+            
 
 
 
