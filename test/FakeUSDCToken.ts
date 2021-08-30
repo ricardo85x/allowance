@@ -8,7 +8,7 @@ import { ethers, waffle } from "hardhat"
 const { deployContract } = waffle
 
 import FakeUSDTokenArtifact from "../src/artifacts/contracts/FakeUSDToken.sol/FakeUSDToken.json"
-import { FakeUSDToken } from "../src/types/FakeUSDToken"
+import { FakeUSDToken } from "../client/src/smart_contract/types/FakeUSDToken"
 
 type Account = {
     address: string;
@@ -36,7 +36,7 @@ describe("Fake USDC TOkEN smart contract", () => {
             })
         })
 
-        fakeUSDCTokenContractAccount1 = (await deployContract(signers[0], FakeUSDTokenArtifact)) as FakeUSDToken;
+        fakeUSDCTokenContractAccount1 = (await deployContract(signers[0], FakeUSDTokenArtifact)) as any as FakeUSDToken;
         fakeUSDCTokenContractAccount2 = fakeUSDCTokenContractAccount1.connect(signers[1])
         fakeUSDCTokenContractAccount3 = fakeUSDCTokenContractAccount1.connect(signers[2])
     })

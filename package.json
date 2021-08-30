@@ -3,6 +3,10 @@
   "version": "2.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "deploy_ganache": "hardhat deploy --network ganache --reset --export-all client/src/smart_contract/info.json",
+    "deploy_ropsten": "hardhat deploy --network ropsten --reset --export-all client/src/smart_contract/info.json"
+  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.2",
     "@nomiclabs/hardhat-waffle": "^2.0.1",

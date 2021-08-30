@@ -3,18 +3,10 @@ import { ReactNode, createContext, useContext, useState, useEffect } from "react
 import { ethers } from "ethers"
 import { ExternalProvider, Web3Provider } from "@ethersproject/providers/lib"
 
-import AllowanceGanache from "../hardhat-deploy/ganache/Allowance.json"
-import AllowanceRopsten from "../hardhat-deploy/ropsten/Allowance.json"
-import { Allowance as AllowanceProps } from "../../../src/types/Allowance"
-
-import FakeUSDTokenGanache from "../hardhat-deploy/ganache/FakeUSDToken.json"
-import FakeUSDTokenRopsten from "../hardhat-deploy/ropsten/FakeUSDToken.json"
-import { FakeUSDToken as FakeUSDTokenProps } from "../../../src/types/FakeUSDToken"
-
-
+import SmartContractInfo from "../smart_contract/info.json"
+import { Allowance as AllowanceProps } from "../smart_contract/types/Allowance"
+import { FakeUSDToken as FakeUSDTokenProps } from "../smart_contract/types/FakeUSDToken"
 import { notify } from "../services/notify";
-
-
 
 declare global {
     interface Window {
@@ -65,10 +57,23 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
 
     const [balance, setBalance] = useState("0")
 
-    const validNetworks = {
-        "1337": "Ganache",
-        "3": "Ropsten"
-    }
+
+
+
+    /**
+        // expected result
+        {
+            "1337": "Ganache",
+            "3": "Ropsten"
+        }
+     **/
+    const validNetworks = Object.keys(SmartContractInfo).map(i => {
+        return {
+            [i]:Object.keys(SmartContractInfo[i])[0]
+        }
+    }).reduce((a,b) => {
+        return {...a, ...b}
+    }, {})
 
 
     const isMetamaskLogged = async () => {
@@ -126,7 +131,8 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
 
                     const network = await _provider.getNetwork()
 
-                    if (!Object.keys(validNetworks).includes(network.chainId.toString())) {
+
+                    if (!Object.keys(SmartContractInfo).includes(network.chainId.toString())) {
 
                         notify(
                             "Wrong network, change your network to " +
@@ -137,12 +143,14 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
                         return;
                     }
 
-                    const currentNetwork = validNetworks[network.chainId.toString()]
 
-                    const AllowanceArtifact = currentNetwork == "Ganache" ? AllowanceGanache : AllowanceRopsten
+                    const currentNetworkName = validNetworks[network.chainId.toString()]
+
+                    const AllowanceArtifact = SmartContractInfo[network.chainId.toString()][currentNetworkName]["contracts"]["Allowance"]
                     const _allowanceContract = new ethers.Contract(AllowanceArtifact.address, AllowanceArtifact.abi, signer) as any as AllowanceProps
 
-                    const FakeUSDTokenArtifact = currentNetwork == "Ganache" ? FakeUSDTokenGanache : FakeUSDTokenRopsten
+                    const FakeUSDTokenArtifact = SmartContractInfo[network.chainId.toString()][currentNetworkName]["contracts"]["FakeUSDToken"]
+
                     const _fakeUSDTokenContract = new ethers.Contract(FakeUSDTokenArtifact.address, FakeUSDTokenArtifact.abi, signer) as any as FakeUSDTokenProps
 
                     !!_allowanceContract && _allowanceContract.removeAllListeners();

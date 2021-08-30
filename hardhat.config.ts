@@ -14,12 +14,15 @@ const config: HardhatUserConfig = {
   namedAccounts: {
     deployer: 0
   },
+
+
   paths: {
     artifacts: "src/artifacts",
-    deployments: "client/src/hardhat-deploy"
+    deployments: "src/hardhat-deploy",
+
   },
   typechain: {
-    outDir: 'src/types',
+    outDir: 'client/src/smart_contract/types',
     target: 'ethers-v5',
   },
   networks: {

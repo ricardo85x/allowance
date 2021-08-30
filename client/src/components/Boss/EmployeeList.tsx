@@ -28,7 +28,6 @@ export const EmployeeList = ({ employees }: EmployeeListProps) => {
 
         console.log("allowance", approvedAllowance)
     
-
         if (!(approvedAllowance >= value)) {
 
 
