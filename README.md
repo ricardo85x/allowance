@@ -18,6 +18,7 @@ On the employee **tab** you can:
 
 A stable FUSD currency is used to make payments.
 This coin follows the Open Zeppelin ERC20 standards.
+
 Add this coin to Metamaks on Employee TAB
 
 Stay while and have fun
