@@ -29,6 +29,7 @@ interface AllowanceInterface extends ethers.utils.Interface {
     "job(address)": FunctionFragment;
     "myEmployees()": FunctionFragment;
     "payEmployee(address)": FunctionFragment;
+    "quitJobAndWithDrawAll()": FunctionFragment;
     "sharedBonusDeposit(uint256)": FunctionFragment;
     "withdrawAll()": FunctionFragment;
   };
@@ -47,6 +48,10 @@ interface AllowanceInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "payEmployee", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "quitJobAndWithDrawAll",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "sharedBonusDeposit",
     values: [BigNumberish]
@@ -74,6 +79,10 @@ interface AllowanceInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "quitJobAndWithDrawAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "sharedBonusDeposit",
     data: BytesLike
   ): Result;
@@ -86,15 +95,17 @@ interface AllowanceInterface extends ethers.utils.Interface {
     "fireEvent(address,address)": EventFragment;
     "hireEvent(address,address)": EventFragment;
     "payEmployeeEvent(address,address)": EventFragment;
+    "quitJobAndWithDrawAllEvent(address)": EventFragment;
     "sharedBonusDepositEvent(address)": EventFragment;
-    "withDrawnAllEvent(address)": EventFragment;
+    "withDrawAllEvent(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "fireEvent"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "hireEvent"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "payEmployeeEvent"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "quitJobAndWithDrawAllEvent"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "sharedBonusDepositEvent"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "withDrawnAllEvent"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "withDrawAllEvent"): EventFragment;
 }
 
 export class Allowance extends BaseContract {
@@ -226,6 +237,10 @@ export class Allowance extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    quitJobAndWithDrawAll(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     sharedBonusDeposit(
       _amount: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -316,6 +331,10 @@ export class Allowance extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  quitJobAndWithDrawAll(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   sharedBonusDeposit(
     _amount: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -400,6 +419,8 @@ export class Allowance extends BaseContract {
 
     payEmployee(_address: string, overrides?: CallOverrides): Promise<void>;
 
+    quitJobAndWithDrawAll(overrides?: CallOverrides): Promise<void>;
+
     sharedBonusDeposit(
       _amount: BigNumberish,
       overrides?: CallOverrides
@@ -424,11 +445,15 @@ export class Allowance extends BaseContract {
       _employee?: string | null
     ): TypedEventFilter<[string, string], { _boss: string; _employee: string }>;
 
+    quitJobAndWithDrawAllEvent(
+      _address?: string | null
+    ): TypedEventFilter<[string], { _address: string }>;
+
     sharedBonusDepositEvent(
       _boss?: string | null
     ): TypedEventFilter<[string], { _boss: string }>;
 
-    withDrawnAllEvent(
+    withDrawAllEvent(
       _address?: string | null
     ): TypedEventFilter<[string], { _address: string }>;
   };
@@ -462,6 +487,10 @@ export class Allowance extends BaseContract {
 
     payEmployee(
       _address: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    quitJobAndWithDrawAll(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -507,6 +536,10 @@ export class Allowance extends BaseContract {
 
     payEmployee(
       _address: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    quitJobAndWithDrawAll(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -17,7 +17,7 @@ contract Allowance {
 
     struct Job {
         address boss;
-        Employee[] employees;
+        address[] employees;
         uint256 balance;
     }
 
@@ -64,8 +64,8 @@ contract Allowance {
         if (job[msg.sender].employees.length > 0) {
             for (uint256 i = 0; i < job[msg.sender].employees.length; i++) {
                 if (
-                    job[msg.sender].employees[i].employed &&
-                    job[msg.sender].employees[i].boss == msg.sender
+                    employee[job[msg.sender].employees[i]].employed &&
+                    employee[job[msg.sender].employees[i]].boss == msg.sender
                 ) {
                     _hasEmployees = true;
                     break;
@@ -106,7 +106,7 @@ contract Allowance {
         employee[_address].salary = _salary;
 
         if(old_employee == false){
-            job[msg.sender].employees.push(employee[_address]);
+            job[msg.sender].employees.push(_address);
         }
 
         emit hireEvent(msg.sender, _address);
@@ -128,6 +128,24 @@ contract Allowance {
 
     }
 
+    event quitJobAndWithDrawAllEvent (address indexed _address);
+
+    function quitJobAndWithDrawAll() external {
+
+        require(employee[msg.sender].employed, "You do not have a Job...");
+        
+        uint balance = employee[msg.sender].oldBalance + employee[msg.sender].balance;
+
+        employee[msg.sender].oldBalance = 0;
+        employee[msg.sender].balance = 0;
+        employee[msg.sender].employed = false;
+
+        if(balance > 0){
+            currency.transfer(msg.sender, balance);
+        }
+
+        emit quitJobAndWithDrawAllEvent(msg.sender);
+    }
 
     modifier canBePaid(address _address) {
         require(alreadyPaid(_address) == false, "You alread paid this month");
@@ -136,11 +154,6 @@ contract Allowance {
 
     function alreadyPaid(address _address) public view employed(_address)  returns(bool) {
 
-
-        console.log("payment month %s ", DateTime.getMonth(employee[_address].paymentDate));
-        console.log("current month %s ", DateTime.getMonth(block.timestamp));
-
-
         if (employee[_address].paymentDate == 0){
             return false;
         } else if (DateTime.getMonth(employee[_address].paymentDate) != DateTime.getMonth(block.timestamp)){
@@ -148,16 +161,6 @@ contract Allowance {
         }
 
         return true;
-        // if (
-        //     employee[_address].paymentDate == 0 ||
-        //     // employee[_address].paymentDate < (block.timestamp - 30 days) 
-        //     DateTime.getMonth(employee[_address].paymentDate) != DateTime.getMonth(block.timestamp)
-
-        //     ) {
-        //         return false; 
-        // } else {
-        //     return true;
-        // }
     }
 
 
@@ -184,8 +187,7 @@ contract Allowance {
 
     }
 
-    
-    event withDrawnAllEvent (address indexed _address);
+    event withDrawAllEvent (address indexed _address);
 
     function withdrawAll() external {
         uint256 balance = employee[msg.sender].oldBalance +
@@ -196,7 +198,7 @@ contract Allowance {
         employee[msg.sender].balance = 0;
         currency.transfer(msg.sender, balance);
 
-        emit withDrawnAllEvent(msg.sender);
+        emit withDrawAllEvent(msg.sender);
     }
 
     function myEmployees() public view returns (Employee [] memory) {
@@ -207,16 +209,13 @@ contract Allowance {
 
         if(number_of_employees > 0){
             for(uint i = 0; i < number_of_employees; i++){
-                my_employees[i] = employee[job[msg.sender].employees[i]._address];
+                my_employees[i] = employee[job[msg.sender].employees[i]];
             }
         }
-        
         return  my_employees;
     }
 
-
     event sharedBonusDepositEvent (address indexed _boss);
-
 
     function sharedBonusDeposit(uint256 _amount) external hasEmployees {
         require(
@@ -234,11 +233,11 @@ contract Allowance {
 
         for (uint256 i = 0; i < job[msg.sender].employees.length; i++) {
             if (
-                job[msg.sender].employees[i].employed &&
-                job[msg.sender].employees[i].boss == msg.sender
+                employee[job[msg.sender].employees[i]].employed &&
+                employee[job[msg.sender].employees[i]].boss == msg.sender
             ) {
       
-                valid_employees[number_of_employees] = job[msg.sender].employees[i]._address;
+                valid_employees[number_of_employees] = job[msg.sender].employees[i];
                 number_of_employees++;
             }
         }

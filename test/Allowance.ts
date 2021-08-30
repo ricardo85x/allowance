@@ -35,7 +35,7 @@ describe("Allowance smart contract", () => {
     let accounts: Account[] = [];
 
     const INITIAL_BALANCE = 100;
-    const SALARY = 5;
+    const SALARY = ethers.utils.parseEther("5");
 
     beforeEach(async () => {
         signers = await ethers.getSigners();
@@ -89,13 +89,13 @@ describe("Allowance smart contract", () => {
 
         await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name,accounts[1].position, SALARY);
 
-        // should receive 50 coins
-        expect(await fakeUSDCTokenContractAccount1.balanceOf(accounts[0].address)).to.be.equals(ethers.utils.parseEther("50"));
+        // should receive 5000 coins
+        expect(await fakeUSDCTokenContractAccount1.balanceOf(accounts[0].address)).to.be.equals(ethers.utils.parseEther("5000"));
 
         await allowanceContractAccount1.hire(accounts[2].address, accounts[2].name,accounts[2].position, SALARY);
 
-        // should stays with 50 coins
-        expect(await fakeUSDCTokenContractAccount1.balanceOf(accounts[0].address)).to.be.equals(ethers.utils.parseEther("50"));
+        // // should stays with 5000 coins
+        expect(await fakeUSDCTokenContractAccount1.balanceOf(accounts[0].address)).to.be.equals(ethers.utils.parseEther("5000"));
 
     })
 
@@ -119,7 +119,7 @@ describe("Allowance smart contract", () => {
         await fakeUSDCTokenContractAccount1.GiveMeSome(INITIAL_BALANCE);
 
         // allow my FakeUSDC to be used for allowanceContractAccount1
-        await fakeUSDCTokenContractAccount1.approveAll(allowanceContractAccount1.address);
+        await fakeUSDCTokenContractAccount1.approve(allowanceContractAccount1.address, ethers.utils.parseEther("999999999"));
 
         // hire a employee
         await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name, accounts[1].position, SALARY);
@@ -157,7 +157,7 @@ describe("Allowance smart contract", () => {
         await fakeUSDCTokenContractAccount1.GiveMeSome(INITIAL_BALANCE);
 
         // allow my FakeUSDC to be used for allowanceContractAccount1
-        await fakeUSDCTokenContractAccount1.approveAll(allowanceContractAccount1.address);
+        await fakeUSDCTokenContractAccount1.approve(allowanceContractAccount1.address, ethers.utils.parseEther("999999999"));
 
         // hire employees
         for (let i = 0; i < employees.length; i++) {
@@ -191,7 +191,7 @@ describe("Allowance smart contract", () => {
         await fakeUSDCTokenContractAccount1.GiveMeSome(INITIAL_BALANCE);
 
         // allow my FakeUSDC to be used for allowanceContractAccount1
-        await fakeUSDCTokenContractAccount1.approveAll(allowanceContractAccount1.address);
+        await fakeUSDCTokenContractAccount1.approve(allowanceContractAccount1.address, ethers.utils.parseEther("999999999"));
 
         // hire a employee
         await allowanceContractAccount1.hire(accounts[1].address, accounts[1].name, accounts[1].position, SALARY);

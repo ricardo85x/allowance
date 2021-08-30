@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/ricardoteixeira/Documents/code/solidity/cryptomarketpool/allowance/contracts/Allowance.sol": {
-      "lastModificationDate": 1630094288139,
-      "contentHash": "ef58a9ccd4f4e7bb2c29e6b8868a9bfd",
+      "lastModificationDate": 1630354983129,
+      "contentHash": "85961fe58d728768a12c534968d56ea3",
       "sourceName": "contracts/Allowance.sol",
       "solcConfig": {
         "version": "0.8.0",

@@ -198,7 +198,6 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
 
             const _employees: EmployeesProps[] = []
 
-            console.log("my employees",employees)
 
             if (employees.length){
                 console.log(employees[0].paymentDate.toNumber())
@@ -347,7 +346,7 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
         })
 
 
-        const withdrawnEventFromUser = _allowanceContract.filters.withDrawnAllEvent(_account);
+        const withdrawnEventFromUser = _allowanceContract.filters.withDrawAllEvent(_account);
 
         _allowanceContract.on(withdrawnEventFromUser, (...args: any[]) => {
             // only future events
@@ -355,6 +354,19 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
 
             if (currentBlock > fromBlock) {
                 notify("Withdrawn confirmed","info")
+                loadBalance(_account, _allowanceContract)
+            }
+        })
+
+
+        const quitJobEventFromUser = _allowanceContract.filters.quitJobAndWithDrawAllEvent(_account);
+
+        _allowanceContract.on(quitJobEventFromUser, (...args: any[]) => {
+            // only future events
+            const currentBlock = args[args.length - 1].blockNumber as number;
+
+            if (currentBlock > fromBlock) {
+                notify("You are free!","info")
                 loadBalance(_account, _allowanceContract)
             }
         })
