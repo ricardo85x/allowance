@@ -27,7 +27,6 @@ export const Boss = () => {
         if (accounts.length && !! fakeUSDContract?.approve && allowanceContract?.address) {
             fakeUSDContract.approve(allowanceContract.address, ethers.utils.parseEther("999999999"))
 
-            console.log("to approve",ethers.utils.parseEther("999999999").toString() )
         }
     }
 

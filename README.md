@@ -1,13 +1,41 @@
-### Allowance dApp
+# Allowance dApp
 
-In this dApp you can be the boss:
+### Manage the payment of your employees (or children)
 
-    - hire employees
-    - fire employees
-    - deposit money to employees wallet
-    - deposit money to a shared employees wallet 
-And you can be the employee where you can
+In this dApp you can be either the boss or the employee.
 
-    - withdraw money
+In the boss **tab** you can:
+- hire an employee with name, address and salary.
+- dismiss an employee.
+- pay the employee's salary.
+- pay a bonus to all employees at once.
+- the system indicates if the salary has already been paid in the current month, and does not allow you to pay twice!
 
-work in progress...
+On the employee **tab** you can:
+- check when your salary is available for withdrawal.
+- withdraw your salary.
+- resign.
+
+A stable FUSD currency is used to make payments.
+This coin follows the Open Zeppelin ERC20 standards.
+
+Stay while and have fun
+
+Live demo: [https://allowance-theta.vercel.app](https://allowance-theta.vercel.app)
+
+**Ingredients**
+
+- solidity 0.8
+- hardhat (typescript)
+- hardhat-deploy
+- hardhat-typechain
+- smart contract testing
+- erc20 
+- ganache
+- infuses ropsten
+- ethers
+- nextjs (typescript)
+- chakra ui
+- toast
+- hooks
+- google fonts

@@ -119,7 +119,6 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
                     const _provider = new ethers.providers.Web3Provider(window.ethereum)
 
                     if (firstRun) {
-                        console.log("first run")
                         listenAccountChange()
                         listenChainChange()
                         setFirstRun(false)
@@ -208,7 +207,6 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
 
 
             if (employees.length){
-                console.log(employees[0].paymentDate.toNumber())
 
 
                 for(let i = 0; i < employees.length; i++){
@@ -220,7 +218,7 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
                         try{
                             await _allowanceContract.alreadyPaid(current_employee._address)
                         } catch(e){
-                            console.log("oups", e)
+                            console.log("Oups", e)
                         }
 
                         const paid = (await _allowanceContract.alreadyPaid(current_employee._address));
@@ -254,9 +252,6 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
                 (window.ethereum as any).on('accountsChanged', (_currentAccounts: string[]) => {
                     resetConnection()
                 })
-            } else {
-                console.log("nada.... account")
-
             }
         } catch (error) {
             console.log("Error, not metamask?", error)
@@ -270,8 +265,6 @@ export const DappContextProvider = ( { children } : DappContextProps ) => {
                 (window.ethereum as any).on('chainChanged', (_chainID) => {
                     resetConnection()
                 })
-            } else {
-                console.log("nada.... chain")
             }
         } catch (error) {
             console.log("Error, not metamask?", error)

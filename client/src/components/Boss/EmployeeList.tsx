@@ -25,17 +25,10 @@ export const EmployeeList = ({ employees }: EmployeeListProps) => {
     const checkAllowance = async (value: ethers.BigNumber) => {
 
         const approvedAllowance = await fakeUSDContract.allowance(accounts[0], allowanceContract.address)
-
-        console.log("allowance", approvedAllowance)
     
         if (!(approvedAllowance >= value)) {
 
-
             notify("Please approve FUSD before paying your employees", "info")
-
-            console.log("request", value.toString())
-
-            console.log("approved", approvedAllowance.toString())
 
             return false
 

@@ -69,10 +69,7 @@ export const HireModal = () => {
                 onClose()
 
             } catch (e) {
-
                 notify("This employee already has a job","error")
-
-                // console.log(e)
             }
         
           
