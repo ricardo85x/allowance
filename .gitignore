@@ -1,8 +1,4 @@
 node_modules
 cache
 .env
-
-client/src/smart_contract/types/factories
-
-
 .vercel
